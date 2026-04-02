@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { Partner, PartnerContact, PARTNER_STATUSES, PARTNERSHIP_TYPES, INDUSTRIES } from "@/types/partner";
+import { Partner, PartnerContact, LegalDocument, PARTNER_STATUSES, PARTNERSHIP_TYPES, INDUSTRIES } from "@/types/partner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -690,6 +690,31 @@ export default function AdminDashboard() {
                                       </div>
                                     </div>
                                   ))}
+                                </div>
+                              )}
+
+                              {/* Legal Documents Section */}
+                              {partner.legal_documents && partner.legal_documents.length > 0 && (
+                                <div className="mt-6 pt-4 border-t">
+                                  <h3 className="font-medium text-gray-900 flex items-center gap-2 mb-3">
+                                    <FileText className="w-4 h-4" />
+                                    Legal Documents
+                                  </h3>
+                                  <div className="grid gap-2">
+                                    {partner.legal_documents.map((doc, index) => (
+                                      <a
+                                        key={index}
+                                        href={doc.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 p-2 rounded-lg border bg-gray-50 hover:bg-[#1A4B84]/5 hover:border-[#1A4B84]/30 transition-colors"
+                                      >
+                                        <FileText className="w-4 h-4 text-[#1A4B84]" />
+                                        <span className="text-sm font-medium text-gray-700">{doc.name}</span>
+                                        <ExternalLink className="w-3 h-3 text-gray-400 ml-auto" />
+                                      </a>
+                                    ))}
+                                  </div>
                                 </div>
                               )}
                             </div>
