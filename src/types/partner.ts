@@ -21,8 +21,45 @@ export interface Partner {
   updated_at: string;
 }
 
+export interface PartnerContact {
+  id: string;
+  partner_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  phone: string | null;
+  position: string | null;
+  is_primary: boolean;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export type PartnershipType = 'Refer TO' | 'Refer FROM';
 export type PartnerStatus = 'Active Partnership' | 'In Discussion' | 'Researching' | 'Outreach Pending' | 'Declined';
+
+export const PARTNER_STATUSES: PartnerStatus[] = [
+  'Active Partnership',
+  'In Discussion', 
+  'Researching',
+  'Outreach Pending',
+  'Declined'
+];
+
+export const PARTNERSHIP_TYPES: PartnershipType[] = ['Refer TO', 'Refer FROM'];
+
+export const INDUSTRIES = [
+  'Technology',
+  'HR Services',
+  'Benefits',
+  'Payroll',
+  'Healthcare',
+  'Financial Services',
+  'Insurance',
+  'Consulting',
+  'Software',
+  'Staffing'
+];
 
 export interface PartnerFilters {
   search: string;
