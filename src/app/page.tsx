@@ -112,69 +112,72 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Partner Directory */}
+      {/* Partner Directory + News Sidebar */}
       <section className="py-12">
         <div className="container">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-2">Partner Directory</h2>
-            <p className="text-muted-foreground">
-              Browse our network of trusted partners
-            </p>
-          </div>
-
-          <PartnerFilters
-            search={search}
-            onSearchChange={setSearch}
-            industry={industry}
-            onIndustryChange={setIndustry}
-            partnershipType={partnershipType}
-            onPartnershipTypeChange={setPartnershipType}
-            industries={industries}
-            partnershipTypes={partnershipTypes}
-          />
-
-          <div className="mt-8">
-            {loading ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-64 bg-muted animate-pulse rounded-lg"
-                  />
-                ))}
-              </div>
-            ) : filteredPartners.length === 0 ? (
-              <div className="text-center py-12">
-                <Handshake className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium">No partners found</h3>
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Main Content - Partner Directory */}
+            <div className="flex-1">
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-2">Partner Directory</h2>
                 <p className="text-muted-foreground">
-                  Try adjusting your search or filters
+                  Browse our network of trusted partners
                 </p>
               </div>
-            ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredPartners.map((partner) => (
-                  <PartnerCard key={partner.id} partner={partner} />
-                ))}
+
+              <PartnerFilters
+                search={search}
+                onSearchChange={setSearch}
+                industry={industry}
+                onIndustryChange={setIndustry}
+                partnershipType={partnershipType}
+                onPartnershipTypeChange={setPartnershipType}
+                industries={industries}
+                partnershipTypes={partnershipTypes}
+              />
+
+              <div className="mt-8">
+                {loading ? (
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-64 bg-muted animate-pulse rounded-lg"
+                      />
+                    ))}
+                  </div>
+                ) : filteredPartners.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Handshake className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-lg font-medium">No partners found</h3>
+                    <p className="text-muted-foreground">
+                      Try adjusting your search or filters
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {filteredPartners.map((partner) => (
+                      <PartnerCard key={partner.id} partner={partner} />
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            Showing {filteredPartners.length} of {partners.length} partners
-          </div>
-        </div>
-      </section>
+              <div className="mt-8 text-center text-sm text-muted-foreground">
+                Showing {filteredPartners.length} of {partners.length} partners
+              </div>
+            </div>
 
-      {/* Partner News */}
-      <section className="py-12 bg-muted/30">
-        <div className="container">
-          <div className="mb-6 flex items-center gap-3">
-            <Newspaper className="w-6 h-6 text-[#1A4B84]" />
-            <h2 className="text-2xl font-bold">Partner News</h2>
-          </div>
-          <div className="max-w-3xl">
-            <NewsFeed limit={5} />
+            {/* Sidebar - Partner News */}
+            <div className="lg:w-80 xl:w-96 flex-shrink-0">
+              <div className="sticky top-8 bg-muted/30 rounded-lg p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <Newspaper className="w-5 h-5 text-[#1A4B84]" />
+                  <h2 className="text-lg font-bold">Partner News</h2>
+                </div>
+                <NewsFeed limit={5} />
+              </div>
+            </div>
           </div>
         </div>
       </section>
