@@ -40,6 +40,11 @@ export function Footer() {
                   Calibrate HCM
                 </a>
               </li>
+              <li>
+                <Link href="/admin/login" className="hover:text-foreground transition-colors">
+                  Admin
+                </Link>
+              </li>
             </ul>
           </div>
           

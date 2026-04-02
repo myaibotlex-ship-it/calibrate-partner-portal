@@ -179,22 +179,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 border-t bg-muted/20">
-        <div className="container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <div>
-              © {new Date().getFullYear()} Calibrate HCM. All rights reserved.
-            </div>
-            <a
-              href="/admin/login"
-              className="hover:text-foreground transition-colors"
-            >
-              Admin
-            </a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
