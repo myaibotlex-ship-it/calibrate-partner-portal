@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { Partner } from "@/types/partner";
 import { PartnerCard } from "@/components/PartnerCard";
 import { PartnerFilters } from "@/components/PartnerFilters";
-import { Handshake, Users, TrendingUp } from "lucide-react";
+import { Handshake } from "lucide-react";
 
 export default function Home() {
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -70,18 +70,10 @@ export default function Home() {
     const activePartners = partners.filter(
       (p) => p.status === "Active Partnership"
     );
-    const referTo = partners.filter((p) =>
-      p.partnership_types.includes("Refer TO")
-    );
-    const referFrom = partners.filter((p) =>
-      p.partnership_types.includes("Refer FROM")
-    );
 
     return {
       total: partners.length,
       active: activePartners.length,
-      referTo: referTo.length,
-      referFrom: referFrom.length,
     };
   }, [partners]);
 
@@ -113,44 +105,6 @@ export default function Home() {
                   {industries.length}
                 </div>
                 <div className="text-sm text-blue-200">Industries</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Partnership Types Info */}
-      <section className="py-12 bg-muted/30">
-        <div className="container">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border shadow-sm">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-[#1A4B84]/10 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-[#1A4B84]" />
-                </div>
-                <h3 className="font-semibold text-lg">Refer TO Partners</h3>
-              </div>
-              <p className="text-muted-foreground">
-                Partners we recommend to clients for complementary services like
-                payroll, benefits administration, and HR technology.
-              </p>
-              <div className="mt-3 text-sm font-medium text-[#1A4B84]">
-                {stats.referTo} partners
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border shadow-sm">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-[#3BB4C1]/10 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-[#3BB4C1]" />
-                </div>
-                <h3 className="font-semibold text-lg">Refer FROM Partners</h3>
-              </div>
-              <p className="text-muted-foreground">
-                Partners who refer clients to Calibrate HCM for data migration,
-                HR consulting, and technology integration services.
-              </p>
-              <div className="mt-3 text-sm font-medium text-[#3BB4C1]">
-                {stats.referFrom} partners
               </div>
             </div>
           </div>
