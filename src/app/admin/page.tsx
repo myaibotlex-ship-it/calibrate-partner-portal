@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { Partner, PartnerContact, LegalDocument, PARTNER_STATUSES, PARTNERSHIP_TYPES, INDUSTRIES } from "@/types/partner";
+import { Partner, PartnerContact, PARTNER_STATUSES, PARTNERSHIP_TYPES, INDUSTRIES } from "@/types/partner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
