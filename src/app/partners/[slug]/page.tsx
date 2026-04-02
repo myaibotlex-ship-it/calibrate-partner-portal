@@ -1,0 +1,258 @@
+import { createServerClient } from "@/lib/supabase";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Building2,
+  ArrowLeft,
+  ExternalLink,
+  Star,
+  Briefcase,
+  Users,
+  CheckCircle,
+} from "lucide-react";
+
+interface Props {
+  params: { slug: string };
+}
+
+export async function generateMetadata({ params }: Props) {
+  const supabase = createServerClient();
+  const { data: partner } = await supabase
+    .from("partners")
+    .select("name, about")
+    .eq("slug", params.slug)
+    .single();
+
+  if (!partner) {
+    return { title: "Partner Not Found" };
+  }
+
+  return {
+    title: `${partner.name} | Calibrate HCM Partner`,
+    description: partner.about || `Learn about our partnership with ${partner.name}`,
+  };
+}
+
+export default async function PartnerPage({ params }: Props) {
+  const supabase = createServerClient();
+  const { data: partner, error } = await supabase
+    .from("partners")
+    .select("*")
+    .eq("slug", params.slug)
+    .single();
+
+  if (error || !partner) {
+    notFound();
+  }
+
+  const partnershipColors: Record<string, string> = {
+    "Refer TO": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100",
+    "Refer FROM": "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100",
+  };
+
+  const statusColors: Record<string, string> = {
+    "Active Partnership": "bg-green-100 text-green-800",
+    "In Discussion": "bg-yellow-100 text-yellow-800",
+    "Researching": "bg-gray-100 text-gray-800",
+    "Outreach Pending": "bg-orange-100 text-orange-800",
+  };
+
+  return (
+    <div className="min-h-screen">
+      {/* Breadcrumb */}
+      <div className="bg-muted/30 border-b">
+        <div className="container py-4">
+          <Link
+            href="/"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Partners
+          </Link>
+        </div>
+      </div>
+
+      {/* Partner Header */}
+      <section className="py-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="container">
+          <div className="flex flex-col md:flex-row items-start gap-8">
+            <div className="w-32 h-32 rounded-xl bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              {partner.logo_url ? (
+                <Image
+                  src={partner.logo_url}
+                  alt={`${partner.name} logo`}
+                  width={128}
+                  height={128}
+                  className="object-contain"
+                />
+              ) : (
+                <Building2 className="w-16 h-16 text-gray-400" />
+              )}
+            </div>
+
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <h1 className="text-3xl md:text-4xl font-bold">{partner.name}</h1>
+                {partner.is_featured && (
+                  <Badge className="bg-amber-500 text-white">
+                    <Star className="w-3 h-3 mr-1 fill-current" />
+                    Featured Partner
+                  </Badge>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {partner.partnership_types.map((type: string) => (
+                  <Badge
+                    key={type}
+                    className={partnershipColors[type] || ""}
+                  >
+                    {type}
+                  </Badge>
+                ))}
+                <Badge className={statusColors[partner.status] || "bg-gray-100"}>
+                  {partner.status}
+                </Badge>
+              </div>
+
+              {partner.industries.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {partner.industries.map((ind: string) => (
+                    <Badge key={ind} variant="outline">
+                      {ind}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {partner.website && (
+                <a
+                  href={partner.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" className="gap-2">
+                    <ExternalLink className="w-4 h-4" />
+                    Visit Website
+                  </Button>
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partner Details */}
+      <section className="py-12">
+        <div className="container">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {partner.about && (
+                <Card>
+                  <CardContent className="pt-6">
+                    <h2 className="text-xl font-semibold mb-4">About</h2>
+                    <p className="text-muted-foreground whitespace-pre-line">
+                      {partner.about}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {partner.calibrate_services_needed.length > 0 && (
+                <Card>
+                  <CardContent className="pt-6">
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                      <Briefcase className="w-5 h-5" />
+                      Calibrate Services
+                    </h2>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Services Calibrate HCM provides in this partnership:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {partner.calibrate_services_needed.map((service: string) => (
+                        <Badge key={service} variant="secondary" className="text-sm py-1">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          {service}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {partner.engagement_types.length > 0 && (
+                <Card>
+                  <CardContent className="pt-6">
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                      <Users className="w-5 h-5" />
+                      Engagement Model
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {partner.engagement_types.map((type: string) => (
+                        <Badge key={type} variant="outline" className="text-sm py-1">
+                          {type}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              <Card>
+                <CardContent className="pt-6">
+                  <h3 className="font-semibold mb-4">Partnership Details</h3>
+                  <dl className="space-y-3 text-sm">
+                    {partner.industry_subcategory.length > 0 && (
+                      <div>
+                        <dt className="text-muted-foreground">Specialization</dt>
+                        <dd className="font-medium">
+                          {partner.industry_subcategory.join(", ")}
+                        </dd>
+                      </div>
+                    )}
+                    {partner.referral_to_percent && (
+                      <div>
+                        <dt className="text-muted-foreground">Referral TO Commission</dt>
+                        <dd className="font-medium">
+                          {(partner.referral_to_percent * 100).toFixed(0)}%
+                        </dd>
+                      </div>
+                    )}
+                    {partner.referral_from_percent && (
+                      <div>
+                        <dt className="text-muted-foreground">Referral FROM Commission</dt>
+                        <dd className="font-medium">
+                          {(partner.referral_from_percent * 100).toFixed(0)}%
+                        </dd>
+                      </div>
+                    )}
+                  </dl>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 border-blue-200 dark:border-blue-800">
+                <CardContent className="pt-6">
+                  <h3 className="font-semibold mb-2">Interested in partnering?</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Join our growing network of partners and expand your business reach.
+                  </p>
+                  <Link href="/become-partner">
+                    <Button className="w-full">Become a Partner</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
