@@ -13,6 +13,10 @@ import {
   Briefcase,
   Users,
   CheckCircle,
+  Mail,
+  Phone,
+  FileText,
+  User,
 } from "lucide-react";
 
 interface Props {
@@ -48,6 +52,13 @@ export default async function PartnerPage({ params }: Props) {
   if (error || !partner) {
     notFound();
   }
+
+  // Fetch contacts for this partner
+  const { data: contacts } = await supabase
+    .from("partner_contacts")
+    .select("*")
+    .eq("partner_id", partner.id)
+    .order("is_primary", { ascending: false });
 
   const partnershipColors: Record<string, string> = {
     "Refer TO": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100",
@@ -202,6 +213,83 @@ export default async function PartnerPage({ params }: Props) {
                   </CardContent>
                 </Card>
               )}
+
+              {/* Key Contacts */}
+              {contacts && contacts.length > 0 && (
+                <Card>
+                  <CardContent className="pt-6">
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                      <User className="w-5 h-5" />
+                      Key Contacts
+                    </h2>
+                    <div className="space-y-4">
+                      {contacts.map((contact: any) => (
+                        <div key={contact.id} className="flex items-start gap-4 p-3 rounded-lg bg-muted/50">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <span className="text-sm font-medium text-primary">
+                              {contact.first_name?.[0]}{contact.last_name?.[0]}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium">
+                                {contact.first_name} {contact.last_name}
+                              </p>
+                              {contact.is_primary && (
+                                <Badge variant="secondary" className="text-xs">Primary</Badge>
+                              )}
+                            </div>
+                            {contact.position && (
+                              <p className="text-sm text-muted-foreground">{contact.position}</p>
+                            )}
+                            <div className="flex flex-wrap gap-3 mt-2 text-sm">
+                              {contact.email && (
+                                <a href={`mailto:${contact.email}`} className="flex items-center gap-1 text-primary hover:underline">
+                                  <Mail className="w-3 h-3" />
+                                  {contact.email}
+                                </a>
+                              )}
+                              {contact.phone && (
+                                <a href={`tel:${contact.phone}`} className="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+                                  <Phone className="w-3 h-3" />
+                                  {contact.phone}
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Company Resources */}
+              {partner.company_resources && partner.company_resources.length > 0 && (
+                <Card>
+                  <CardContent className="pt-6">
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                      <FileText className="w-5 h-5" />
+                      Company Resources
+                    </h2>
+                    <div className="space-y-2">
+                      {partner.company_resources.map((resource: any, idx: number) => (
+                        <a
+                          key={idx}
+                          href={resource.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                        >
+                          <FileText className="w-4 h-4 text-muted-foreground" />
+                          <span className="flex-1">{resource.name || resource.url}</span>
+                          <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                        </a>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
             {/* Sidebar */}
@@ -218,22 +306,7 @@ export default async function PartnerPage({ params }: Props) {
                         </dd>
                       </div>
                     )}
-                    {partner.referral_to_percent && (
-                      <div>
-                        <dt className="text-muted-foreground">Referral TO Commission</dt>
-                        <dd className="font-medium">
-                          {(partner.referral_to_percent * 100).toFixed(0)}%
-                        </dd>
-                      </div>
-                    )}
-                    {partner.referral_from_percent && (
-                      <div>
-                        <dt className="text-muted-foreground">Referral FROM Commission</dt>
-                        <dd className="font-medium">
-                          {(partner.referral_from_percent * 100).toFixed(0)}%
-                        </dd>
-                      </div>
-                    )}
+{/* Commission info moved to admin only */}
                   </dl>
                 </CardContent>
               </Card>
