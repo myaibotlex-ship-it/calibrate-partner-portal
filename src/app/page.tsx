@@ -5,7 +5,8 @@ import { supabase } from "@/lib/supabase";
 import { Partner } from "@/types/partner";
 import { PartnerCard } from "@/components/PartnerCard";
 import { PartnerFilters } from "@/components/PartnerFilters";
-import { Handshake } from "lucide-react";
+import { Handshake, Newspaper } from "lucide-react";
+import { NewsFeed } from "@/components/NewsFeed";
 
 export default function Home() {
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -161,6 +162,19 @@ export default function Home() {
 
           <div className="mt-8 text-center text-sm text-muted-foreground">
             Showing {filteredPartners.length} of {partners.length} partners
+          </div>
+        </div>
+      </section>
+
+      {/* Partner News */}
+      <section className="py-12 bg-muted/30">
+        <div className="container">
+          <div className="mb-6 flex items-center gap-3">
+            <Newspaper className="w-6 h-6 text-[#1A4B84]" />
+            <h2 className="text-2xl font-bold">Partner News</h2>
+          </div>
+          <div className="max-w-3xl">
+            <NewsFeed limit={5} />
           </div>
         </div>
       </section>
