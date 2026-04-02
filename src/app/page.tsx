@@ -88,7 +88,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-[#1A4B84] via-[#1A4B84] to-[#3BB4C1] text-white py-16 md:py-24">
         <div className="container">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -125,8 +125,8 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border shadow-sm">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <div className="w-10 h-10 rounded-full bg-[#1A4B84]/10 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-[#1A4B84]" />
                 </div>
                 <h3 className="font-semibold text-lg">Refer TO Partners</h3>
               </div>
@@ -134,14 +134,14 @@ export default function Home() {
                 Partners we recommend to clients for complementary services like
                 payroll, benefits administration, and HR technology.
               </p>
-              <div className="mt-3 text-sm font-medium text-blue-600">
+              <div className="mt-3 text-sm font-medium text-[#1A4B84]">
                 {stats.referTo} partners
               </div>
             </div>
             <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border shadow-sm">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <div className="w-10 h-10 rounded-full bg-[#3BB4C1]/10 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-[#3BB4C1]" />
                 </div>
                 <h3 className="font-semibold text-lg">Refer FROM Partners</h3>
               </div>
@@ -149,7 +149,7 @@ export default function Home() {
                 Partners who refer clients to Calibrate HCM for data migration,
                 HR consulting, and technology integration services.
               </p>
-              <div className="mt-3 text-sm font-medium text-purple-600">
+              <div className="mt-3 text-sm font-medium text-[#3BB4C1]">
                 {stats.referFrom} partners
               </div>
             </div>

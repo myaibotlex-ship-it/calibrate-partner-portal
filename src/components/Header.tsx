@@ -1,20 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { Users, Handshake } from "lucide-react";
+import Image from "next/image";
+import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
-            <Handshake className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <span className="font-bold text-lg">Calibrate HCM</span>
-            <span className="text-muted-foreground text-sm block -mt-1">Partner Portal</span>
+        <Link href="/" className="flex items-center space-x-3">
+          <Image 
+            src="/calibrate-logo.png" 
+            alt="Calibrate HCM" 
+            width={140} 
+            height={40}
+            className="h-10 w-auto"
+          />
+          <div className="border-l pl-3 border-border">
+            <span className="text-muted-foreground text-sm font-medium">Partner Portal</span>
           </div>
         </Link>
         
@@ -23,7 +27,7 @@ export function Header() {
             <Button variant="ghost">Partners</Button>
           </Link>
           <Link href="/become-partner">
-            <Button className="gap-2">
+            <Button className="gap-2 bg-[#1A4B84] hover:bg-[#1A4B84]/90">
               <Users className="w-4 h-4" />
               Become a Partner
             </Button>
