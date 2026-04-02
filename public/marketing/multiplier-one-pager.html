@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calibrate HCM + Multiplier Partnership</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1a1a1a;
+      line-height: 1.5;
+      background: #fff;
+    }
+    
+    .page {
+      max-width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      padding: 0.5in;
+      background: #fff;
+    }
+    
+    @media print {
+      .page {
+        padding: 0.4in;
+        min-height: auto;
+      }
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #1A4B84;
+      margin-bottom: 24px;
+    }
+    
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .logo {
+      height: 40px;
+    }
+    
+    .logo-divider {
+      width: 2px;
+      height: 36px;
+      background: #e5e5e5;
+    }
+    
+    .partnership-badge {
+      background: linear-gradient(135deg, #1A4B84 0%, #3BB4C1 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1A4B84 0%, #2d6bb3 50%, #3BB4C1 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .hero p {
+      font-size: 16px;
+      opacity: 0.95;
+      max-width: 600px;
+    }
+    
+    /* Stats Row */
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      flex: 1;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1A4B84;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    
+    /* Two Column Layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .section {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 24px;
+    }
+    
+    .section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1A4B84;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .section h2::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: #3BB4C1;
+      border-radius: 2px;
+    }
+    
+    .feature-list {
+      list-style: none;
+    }
+    
+    .feature-list li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+      font-size: 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .feature-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #3BB4C1;
+      font-weight: 700;
+    }
+    
+    /* Pricing Callout */
+    .pricing-callout {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 2px solid #3BB4C1;
+      border-radius: 10px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    
+    .pricing-left h3 {
+      font-size: 14px;
+      color: #1A4B84;
+      margin-bottom: 4px;
+    }
+    
+    .pricing-left .price {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1A4B84;
+    }
+    
+    .pricing-left .price span {
+      font-size: 14px;
+      font-weight: 400;
+      color: #64748b;
+    }
+    
+    .pricing-right {
+      text-align: right;
+    }
+    
+    .pricing-right p {
+      font-size: 13px;
+      color: #64748b;
+    }
+    
+    .pricing-right strong {
+      color: #1A4B84;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      background: #1a1a1a;
+      color: white;
+      padding: 24px 32px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .cta-text h3 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    
+    .cta-text p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    .cta-contact {
+      text-align: right;
+    }
+    
+    .cta-contact a {
+      color: #3BB4C1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .cta-contact p {
+      font-size: 13px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-section">
+        <svg class="logo" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="28" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#1A4B84">Calibrate</text>
+          <text x="108" y="28" font-family="Inter, sans-serif" font-size="22" font-weight="400" fill="#3BB4C1">HCM</text>
+        </svg>
+        <div class="logo-divider"></div>
+        <svg class="logo" viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="28" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#5D5FEF">Multiplier</text>
+        </svg>
+      </div>
+      <div class="partnership-badge">Strategic Partnership</div>
+    </header>
+    
+    <!-- Hero -->
+    <section class="hero">
+      <h1>Expand Your Workforce Globally—Without the Complexity</h1>
+      <p>Hire, onboard, and pay talent in 150+ countries with full compliance. No local entities required. Calibrate HCM + Multiplier make global expansion simple.</p>
+    </section>
+    
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">150+</div>
+        <div class="stat-label">Countries Covered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">24hr</div>
+        <div class="stat-label">Onboarding Time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Compliance Guaranteed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$0</div>
+        <div class="stat-label">Setup Fees</div>
+      </div>
+    </div>
+    
+    <!-- Two Column Features -->
+    <div class="two-col">
+      <div class="section">
+        <h2>Multiplier Platform</h2>
+        <ul class="feature-list">
+          <li>Employer of Record (EOR) in 150+ countries</li>
+          <li>Compliant contracts & local labor law expertise</li>
+          <li>Global payroll in local currencies</li>
+          <li>Benefits administration & management</li>
+          <li>Integrated expense management</li>
+          <li>Single platform for your entire global team</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Calibrate HCM Services</h2>
+        <ul class="feature-list">
+          <li>Strategic HR technology consulting</li>
+          <li>Implementation & system integration</li>
+          <li>Data migration & analytics</li>
+          <li>Change management & training</li>
+          <li>Ongoing optimization & support</li>
+          <li>Multi-vendor HR tech ecosystem design</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Pricing -->
+    <div class="pricing-callout">
+      <div class="pricing-left">
+        <h3>Transparent EOR Pricing</h3>
+        <div class="price">$400 <span>/ employee / month</span></div>
+      </div>
+      <div class="pricing-right">
+        <p><strong>No hidden fees.</strong> No setup costs.</p>
+        <p>No off-boarding charges. Volume pricing available.</p>
+      </div>
+    </div>
+    
+    <!-- CTA -->
+    <div class="cta-section">
+      <div class="cta-text">
+        <h3>Ready to Go Global?</h3>
+        <p>Let's discuss how Multiplier + Calibrate can support your international growth.</p>
+      </div>
+      <div class="cta-contact">
+        <a href="mailto:partnerships@calibratehcm.com">partnerships@calibratehcm.com</a>
+        <p>calibratehcm.com | usemultiplier.com</p>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <span>© 2026 Calibrate HCM & Multiplier. All rights reserved.</span>
+      <span>Partner One-Pager | April 2026</span>
+    </footer>
+  </div>
+</body>
+</html>
