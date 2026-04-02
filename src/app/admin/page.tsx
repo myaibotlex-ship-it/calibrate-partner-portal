@@ -40,6 +40,7 @@ import {
   UserPlus,
   Mail,
   Phone,
+  FileText,
 } from "lucide-react";
 import Image from "next/image";
 

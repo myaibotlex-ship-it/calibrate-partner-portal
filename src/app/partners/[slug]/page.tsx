@@ -223,7 +223,7 @@ export default async function PartnerPage({ params }: Props) {
                       Key Contacts
                     </h2>
                     <div className="space-y-4">
-                      {contacts.map((contact: any) => (
+                      {contacts.map((contact: { id: string; first_name: string; last_name: string; position?: string; email?: string; phone?: string; is_primary?: boolean }) => (
                         <div key={contact.id} className="flex items-start gap-4 p-3 rounded-lg bg-muted/50">
                           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                             <span className="text-sm font-medium text-primary">
@@ -273,7 +273,7 @@ export default async function PartnerPage({ params }: Props) {
                       Company Resources
                     </h2>
                     <div className="space-y-2">
-                      {partner.company_resources.map((resource: any, idx: number) => (
+                      {partner.company_resources.map((resource: { name?: string; url: string }, idx: number) => (
                         <a
                           key={idx}
                           href={resource.url}
