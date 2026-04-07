@@ -17,6 +17,8 @@ import {
   Phone,
   FileText,
   User,
+  Download,
+  Eye,
 } from "lucide-react";
 
 interface Props {
@@ -264,28 +266,65 @@ export default async function PartnerPage({ params }: Props) {
                 </Card>
               )}
 
-              {/* Company Resources */}
+              {/* Documents & Resources */}
               {partner.company_resources && partner.company_resources.length > 0 && (
                 <Card>
                   <CardContent className="pt-6">
                     <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                       <FileText className="w-5 h-5" />
-                      Company Resources
+                      Documents & Resources
                     </h2>
                     <div className="space-y-2">
-                      {partner.company_resources.map((resource: { name?: string; url: string }, idx: number) => (
-                        <a
-                          key={idx}
-                          href={resource.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
-                        >
-                          <FileText className="w-4 h-4 text-muted-foreground" />
-                          <span className="flex-1">{resource.name || resource.url}</span>
-                          <ExternalLink className="w-4 h-4 text-muted-foreground" />
-                        </a>
-                      ))}
+                      {partner.company_resources.map((resource: { name?: string; url: string; type?: string; downloadable?: boolean }, idx: number) => {
+                        const isPdf = resource.type === "pdf" || resource.url?.endsWith(".pdf");
+                        const isDoc = resource.type === "doc" || resource.type === "docx" || resource.url?.match(/\.docx?$/);
+                        const fileType = resource.type?.toUpperCase() || (isPdf ? "PDF" : isDoc ? "DOC" : "LINK");
+                        const badgeColor = isPdf ? "bg-red-100 text-red-700" : isDoc ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700";
+
+                        return (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                          >
+                            <FileText className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                            <span className="flex-1 font-medium text-sm">{resource.name || resource.url}</span>
+                            <Badge variant="secondary" className={`text-xs ${badgeColor}`}>
+                              {fileType}
+                            </Badge>
+                            {isPdf || isDoc ? (
+                              <div className="flex items-center gap-1">
+                                <a
+                                  href={resource.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-1.5 rounded-md hover:bg-muted transition-colors"
+                                  title="View"
+                                >
+                                  <Eye className="w-4 h-4 text-muted-foreground" />
+                                </a>
+                                <a
+                                  href={resource.url}
+                                  download
+                                  className="p-1.5 rounded-md hover:bg-muted transition-colors"
+                                  title="Download"
+                                >
+                                  <Download className="w-4 h-4 text-muted-foreground" />
+                                </a>
+                              </div>
+                            ) : (
+                              <a
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-1.5 rounded-md hover:bg-muted transition-colors"
+                                title="Open link"
+                              >
+                                <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                              </a>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </CardContent>
                 </Card>

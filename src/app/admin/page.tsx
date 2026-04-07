@@ -63,6 +63,10 @@ export default function AdminDashboard() {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<{imported: number; skipped: number; errors: string[]} | null>(null);
+  const [docUploadOpen, setDocUploadOpen] = useState<string | null>(null);
+  const [docFile, setDocFile] = useState<File | null>(null);
+  const [docName, setDocName] = useState("");
+  const [uploadingDoc, setUploadingDoc] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -363,6 +367,55 @@ export default function AdminDashboard() {
       });
     } finally {
       setImporting(false);
+    }
+  }
+
+  async function handleDocUpload(partner: Partner) {
+    if (!docFile || !docName) return;
+
+    setUploadingDoc(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", docFile);
+      formData.append("partner_id", partner.id);
+      formData.append("partner_slug", partner.slug);
+      formData.append("document_name", docName);
+
+      const response = await fetch("/api/upload-partner-document", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+
+      setDocUploadOpen(null);
+      setDocFile(null);
+      setDocName("");
+      await fetchPartners();
+    } catch (error) {
+      console.error("Document upload error:", error);
+      alert("Failed to upload document.");
+    } finally {
+      setUploadingDoc(false);
+    }
+  }
+
+  async function handleDeleteResource(partner: Partner, index: number) {
+    try {
+      const resources = [...(partner.company_resources || [])];
+      resources.splice(index, 1);
+
+      const { error } = await supabase
+        .from("partners")
+        .update({ company_resources: resources })
+        .eq("id", partner.id);
+
+      if (error) throw error;
+      await fetchPartners();
+    } catch (error) {
+      console.error("Error deleting resource:", error);
+      alert("Failed to delete resource.");
     }
   }
 
@@ -717,6 +770,61 @@ export default function AdminDashboard() {
                                   </div>
                                 </div>
                               )}
+
+                              {/* Company Resources / Documents Section */}
+                              <div className="mt-6 pt-4 border-t">
+                                <div className="flex items-center justify-between mb-3">
+                                  <h3 className="font-medium text-gray-900 flex items-center gap-2">
+                                    <FileText className="w-4 h-4" />
+                                    Documents & Resources
+                                  </h3>
+                                  <Button
+                                    size="sm"
+                                    onClick={() => { setDocUploadOpen(partner.id); setDocFile(null); setDocName(""); }}
+                                    className="bg-[#1A4B84] hover:bg-[#1A4B84]/90"
+                                  >
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    Add Document
+                                  </Button>
+                                </div>
+                                {partner.company_resources && partner.company_resources.length > 0 ? (
+                                  <div className="grid gap-2">
+                                    {partner.company_resources.map((resource: { name?: string; url: string; type?: string }, index: number) => {
+                                      const ext = resource.type?.toUpperCase() || (resource.url?.endsWith(".pdf") ? "PDF" : "LINK");
+                                      return (
+                                        <div
+                                          key={index}
+                                          className="flex items-center gap-2 p-2 rounded-lg border bg-gray-50 hover:bg-[#1A4B84]/5 transition-colors"
+                                        >
+                                          <FileText className="w-4 h-4 text-[#1A4B84]" />
+                                          <span className="text-sm font-medium text-gray-700 flex-1">
+                                            {resource.name || resource.url}
+                                          </span>
+                                          <Badge variant="outline" className="text-xs">{ext}</Badge>
+                                          <a
+                                            href={resource.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-gray-400 hover:text-[#1A4B84]"
+                                          >
+                                            <ExternalLink className="w-3 h-3" />
+                                          </a>
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => handleDeleteResource(partner, index)}
+                                            className="text-gray-400 hover:text-red-500 h-6 w-6 p-0"
+                                          >
+                                            <Trash2 className="w-3 h-3" />
+                                          </Button>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                ) : (
+                                  <p className="text-gray-500 text-sm">No documents yet.</p>
+                                )}
+                              </div>
                             </div>
                           </td>
                         </tr>
@@ -1106,6 +1214,66 @@ export default function AdminDashboard() {
               disabled={saving}
             >
               {saving ? "Deleting..." : "Delete Contact"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Document Upload Dialog */}
+      <Dialog open={!!docUploadOpen} onOpenChange={(open) => { if (!open) { setDocUploadOpen(null); setDocFile(null); setDocName(""); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Document</DialogTitle>
+            <DialogDescription>
+              Upload a document for {partners.find(p => p.id === docUploadOpen)?.name || "this partner"}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div>
+              <label className="text-sm font-medium mb-1 block">Document Name *</label>
+              <Input
+                value={docName}
+                onChange={(e) => setDocName(e.target.value)}
+                placeholder="e.g. Partnership One-Pager"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-1 block">File *</label>
+              <Input
+                type="file"
+                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                onChange={(e) => setDocFile(e.target.files?.[0] || null)}
+              />
+              {docFile && (
+                <p className="text-sm text-gray-500 mt-1">
+                  {docFile.name} ({Math.round(docFile.size / 1024)}KB)
+                </p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setDocUploadOpen(null); setDocFile(null); setDocName(""); }}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                const partner = partners.find(p => p.id === docUploadOpen);
+                if (partner) handleDocUpload(partner);
+              }}
+              disabled={uploadingDoc || !docFile || !docName}
+              className="bg-[#1A4B84] hover:bg-[#1A4B84]/90"
+            >
+              {uploadingDoc ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload Document
+                </>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -3,6 +3,13 @@ export interface LegalDocument {
   url: string;
 }
 
+export interface CompanyResource {
+  name: string;
+  url: string;
+  type?: string;
+  downloadable?: boolean;
+}
+
 export interface Partner {
   id: string;
   airtable_id: string;
@@ -22,6 +29,7 @@ export interface Partner {
   calibrate_services_needed: string[];
   is_featured: boolean;
   is_active: boolean;
+  company_resources: CompanyResource[] | null;
   legal_documents: LegalDocument[] | null;
   created_at: string;
   updated_at: string;
