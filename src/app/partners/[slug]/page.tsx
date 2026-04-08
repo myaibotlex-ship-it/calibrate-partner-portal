@@ -172,6 +172,18 @@ export default async function PartnerPage({ params }: Props) {
                     <p className="text-muted-foreground whitespace-pre-line">
                       {partner.about}
                     </p>
+                    {/* Embed PDF one-pagers directly in the About section */}
+                    {partner.company_resources?.filter((r: { type?: string; url: string }) => r.type === "pdf" || r.url?.endsWith(".pdf")).map((r: { name?: string; url: string }, idx: number) => (
+                      <div key={idx} className="mt-6">
+                        {r.name && <p className="text-sm font-medium text-muted-foreground mb-2">{r.name}</p>}
+                        <iframe
+                          src={`${r.url}#toolbar=0&navpanes=0&scrollbar=0`}
+                          className="w-full rounded-lg border"
+                          style={{ height: '700px' }}
+                          title={r.name || 'Partner Document'}
+                        />
+                      </div>
+                    ))}
                   </CardContent>
                 </Card>
               )}
@@ -266,8 +278,8 @@ export default async function PartnerPage({ params }: Props) {
                 </Card>
               )}
 
-              {/* Documents & Resources */}
-              {partner.company_resources && partner.company_resources.length > 0 && (
+              {/* Documents & Resources — non-PDF links only (PDFs are embedded in About) */}
+              {partner.company_resources && partner.company_resources.filter((r: { type?: string; url: string }) => !(r.type === "pdf" || r.url?.endsWith(".pdf"))).length > 0 && (
                 <Card>
                   <CardContent className="pt-6">
                     <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -275,7 +287,7 @@ export default async function PartnerPage({ params }: Props) {
                       Documents & Resources
                     </h2>
                     <div className="space-y-2">
-                      {partner.company_resources.map((resource: { name?: string; url: string; type?: string; downloadable?: boolean }, idx: number) => {
+                      {partner.company_resources.filter((r: { type?: string; url: string }) => !(r.type === "pdf" || r.url?.endsWith(".pdf"))).map((resource: { name?: string; url: string; type?: string; downloadable?: boolean }, idx: number) => {
                         const isPdf = resource.type === "pdf" || resource.url?.endsWith(".pdf");
                         const isDoc = resource.type === "doc" || resource.type === "docx" || resource.url?.match(/\.docx?$/);
                         const fileType = resource.type?.toUpperCase() || (isPdf ? "PDF" : isDoc ? "DOC" : "LINK");
